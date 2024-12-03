@@ -3,6 +3,7 @@
 // that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -107,24 +108,29 @@ class _LiveTimeIndicatorState extends State<LiveTimeIndicator> {
         widget.endHour <= _currentTime.hour) {
       return SizedBox.shrink();
     }
-    return CustomPaint(
-      size: Size(widget.width, widget.liveTimeIndicatorSettings.height),
-      painter: CurrentTimeLinePainter(
-        color: widget.liveTimeIndicatorSettings.color,
-        height: widget.liveTimeIndicatorSettings.height,
-        offset: Offset(
-          widget.timeLineWidth + widget.liveTimeIndicatorSettings.offset,
-          (_currentTime.getTotalMinutes - startMinutes) *
-              widget.heightPerMinute,
+    return Transform(
+      transform: Matrix4.identity()
+        ..rotateY(Localizations.localeOf(context).languageCode == "en" ? 0 : math.pi)
+        ..setTranslationRaw(MediaQuery.of(context).size.width , 0, 0),
+      child: CustomPaint(
+        size: Size(widget.width, widget.liveTimeIndicatorSettings.height),
+        painter: CurrentTimeLinePainter(
+          color: widget.liveTimeIndicatorSettings.color,
+          height: widget.liveTimeIndicatorSettings.height,
+          offset: Offset(
+            widget.timeLineWidth + widget.liveTimeIndicatorSettings.offset,
+            (_currentTime.getTotalMinutes - startMinutes) *
+                widget.heightPerMinute,
+          ),
+          timeString: timeString,
+          showBullet: widget.liveTimeIndicatorSettings.showBullet,
+          showTime: widget.liveTimeIndicatorSettings.showTime,
+          showTimeBackgroundView:
+              widget.liveTimeIndicatorSettings.showTimeBackgroundView,
+          bulletRadius: widget.liveTimeIndicatorSettings.bulletRadius,
+          timeBackgroundViewWidth:
+              widget.liveTimeIndicatorSettings.timeBackgroundViewWidth,
         ),
-        timeString: timeString,
-        showBullet: widget.liveTimeIndicatorSettings.showBullet,
-        showTime: widget.liveTimeIndicatorSettings.showTime,
-        showTimeBackgroundView:
-            widget.liveTimeIndicatorSettings.showTimeBackgroundView,
-        bulletRadius: widget.liveTimeIndicatorSettings.bulletRadius,
-        timeBackgroundViewWidth:
-            widget.liveTimeIndicatorSettings.timeBackgroundViewWidth,
       ),
     );
   }

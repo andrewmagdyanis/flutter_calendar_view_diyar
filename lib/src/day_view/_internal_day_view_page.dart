@@ -297,7 +297,7 @@ class _InternalDayViewPageState<T extends Object?>
                       minuteSlotSize: widget.minuteSlotSize,
                     ),
                     Align(
-                      alignment: Alignment.centerRight,
+                      alignment: Localizations.localeOf(context).languageCode == "ar" ? Alignment.centerLeft: Alignment.centerRight,
                       child: EventGenerator<T>(
                         height: widget.height,
                         date: widget.date,
