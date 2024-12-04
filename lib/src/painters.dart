@@ -283,32 +283,41 @@ class CurrentTimeLinePainter extends CustomPainter {
   /// Width of time backgroud view.
   final double timeBackgroundViewWidth;
 
+  final bool isRtl;
+
   /// Paints a single horizontal line at [offset].
-  CurrentTimeLinePainter({
-    required this.showBullet,
-    required this.color,
-    required this.height,
-    required this.offset,
-    required this.bulletRadius,
-    required this.timeString,
-    required this.showTime,
-    required this.showTimeBackgroundView,
-    required this.timeBackgroundViewWidth,
-  });
+  CurrentTimeLinePainter(
+      {required this.showBullet,
+      required this.color,
+      required this.height,
+      required this.offset,
+      required this.bulletRadius,
+      required this.timeString,
+      required this.showTime,
+      required this.showTimeBackgroundView,
+      required this.timeBackgroundViewWidth,
+      this.isRtl = true});
 
   @override
   void paint(Canvas canvas, Size size) {
+    double x1 = offset.dx - (showBullet ? 0 : 8);
+    double x2 = size.width;
+    if (!isRtl){
+      double lineWidth = x2 - x1;
+      x1 = (showBullet ? 0 : 8);
+      x2 = x1 + lineWidth;
+    }
     canvas.drawLine(
-      Offset(offset.dx - (showBullet ? 0 : 8), offset.dy),
-      Offset(size.width, offset.dy),
+      Offset(x1, offset.dy),
+      Offset(x2, offset.dy),
       Paint()
         ..color = color
         ..strokeWidth = height,
     );
 
     if (showBullet) {
-      canvas.drawCircle(
-          Offset(offset.dx, offset.dy), bulletRadius, Paint()..color = color);
+      canvas.drawCircle(Offset(isRtl ? x1 : x2, offset.dy),
+          bulletRadius, Paint()..color = color);
     }
 
     if (showTimeBackgroundView) {
